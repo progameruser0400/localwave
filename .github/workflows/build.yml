@@ -38,7 +38,7 @@ jobs:
       - name: Build unsigned .app
         run: |
           xcodebuild -project localwave.xcodeproj \
-            -scheme localwave \
+            -scheme musicapp \
             -sdk iphoneos \
             -configuration Release \
             CODE_SIGNING_ALLOWED=NO \
@@ -53,6 +53,8 @@ jobs:
           mkdir -p Payload
           cp -r build/Build/Products/Release-iphoneos/localwave.app Payload/
           zip -r localwave.ipa Payload
+      - name: List build products
+        run: ls build/Build/Products/Release-iphoneos/
 
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4
