@@ -5,14 +5,17 @@ on:
 
 jobs:
   build:
-    runs-on: macos-14  # macOS runner with Xcode preinstalled
+    runs-on: macos-15  # newer runner, ships newer Xcode versions
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Select Xcode version
-        run: sudo xcode-select -s /Applications/Xcode_15.4.app
+      - name: List available Xcode versions
+        run: ls /Applications | grep Xcode
+
+      - name: Select latest Xcode
+        run: sudo xcode-select -s /Applications/Xcode_16.2.app  # adjust based on above listing
 
       - name: Build unsigned .app
         run: |
