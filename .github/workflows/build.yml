@@ -19,6 +19,15 @@ jobs:
 
       - name: List schemes
         run: xcodebuild -list -project localwave.xcodeproj
+      
+      - name: Check for app icon assets in source
+        run: |
+          echo "--- Searching for .xcassets folders ---"
+          find . -name "*.xcassets" -maxdepth 4
+          echo "--- Searching for AppIcon set specifically ---"
+          find . -iname "*appicon*"
+          echo "--- Checking build setting ASSETCATALOG_COMPILER_APPICON_NAME ---"
+          xcodebuild -showBuildSettings -project localwave.xcodeproj -scheme musicapp | grep ASSETCATALOG_COMPILER_APPICON_NAME
 
       - name: Build unsigned .app
         run: |
@@ -33,16 +42,6 @@ jobs:
             IPHONEOS_DEPLOYMENT_TARGET=17.0 \
             -derivedDataPath build \
             clean build
-      - name: Inspect app bundle for icons
-        run: |
-          APP_PATH=$(find build/Build/Products/Release-iphoneos -name "*.app" -maxdepth 1)
-          echo "App path: $APP_PATH"
-          ls -la "$APP_PATH"
-          echo "--- Info.plist icon keys ---"
-          /usr/libexec/PlistBuddy -c "Print :CFBundleIcons" "$APP_PATH/Info.plist" 2>&1 || echo "No CFBundleIcons key found"
-          echo "--- Looking for AppIcon assets ---"
-          ls "$APP_PATH" | grep -i icon || echo "No icon files found in bundle"
-
       - name: Package as IPA
         run: |
           mkdir -p Payload
