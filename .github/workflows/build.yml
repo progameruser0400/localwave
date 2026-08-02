@@ -25,19 +25,6 @@ jobs:
       - name: Build unsigned .app
         run: |
           xcodebuild -project localwave.xcodeproj \
-            -scheme localwave \
-            -sdk iphoneos \
-            -configuration Release \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY="" \
-            DEVELOPMENT_TEAM="" \
-            -derivedDataPath build \
-            clean build
-
-      - name: Build unsigned .app
-        run: |
-          xcodebuild -project localwave.xcodeproj \
             -scheme musicapp \
             -sdk iphoneos \
             -configuration Release \
