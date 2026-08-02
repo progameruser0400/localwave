@@ -19,15 +19,6 @@ jobs:
 
       - name: List schemes
         run: xcodebuild -list -project localwave.xcodeproj
-      
-      - name: Check for app icon assets in source
-        run: |
-          echo "--- Searching for .xcassets folders ---"
-          find . -name "*.xcassets" -maxdepth 4
-          echo "--- Searching for AppIcon set specifically ---"
-          find . -iname "*appicon*"
-          echo "--- Checking build setting ASSETCATALOG_COMPILER_APPICON_NAME ---"
-          xcodebuild -showBuildSettings -project localwave.xcodeproj -scheme musicapp | grep ASSETCATALOG_COMPILER_APPICON_NAME
 
       - name: Build unsigned .app
         run: |
@@ -42,6 +33,21 @@ jobs:
             IPHONEOS_DEPLOYMENT_TARGET=17.0 \
             -derivedDataPath build \
             clean build
+      
+      - name: Search build log for asset catalog compilation
+        run: |
+          xcodebuild -project localwave.xcodeproj \
+            -scheme musicapp \
+            -destination 'generic/platform=iOS' \
+            -configuration Release \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            DEVELOPMENT_TEAM="" \
+            IPHONEOS_DEPLOYMENT_TARGET=16.0 \
+            -derivedDataPath build \
+            clean build 2>&1 | tee full_build.log | grep -i -A 5 "CompileAssetCatalog\|assetcatalog\|actool"
+      
       - name: Package as IPA
         run: |
           mkdir -p Payload
