@@ -21,9 +21,6 @@ jobs:
 
       - name: List schemes
         run: xcodebuild -list -project localwave.xcodeproj
-      
-      - name: Check device family setting
-        run: xcodebuild -showBuildSettings -project localwave.xcodeproj -scheme musicapp | grep TARGETED_DEVICE_FAMILY
 
       - name: Build unsigned .app
         run: |
