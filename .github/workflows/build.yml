@@ -35,6 +35,15 @@ jobs:
             IPHONEOS_DEPLOYMENT_TARGET=15.0 \
             -derivedDataPath build \
             clean build
+      - name: Inspect app bundle for icons
+        run: |
+          APP_PATH=$(find build/Build/Products/Release-iphoneos -name "*.app" -maxdepth 1)
+          echo "App path: $APP_PATH"
+          ls -la "$APP_PATH"
+          echo "--- Info.plist icon keys ---"
+          /usr/libexec/PlistBuddy -c "Print :CFBundleIcons" "$APP_PATH/Info.plist" 2>&1 || echo "No CFBundleIcons key found"
+          echo "--- Looking for AppIcon assets ---"
+          ls "$APP_PATH" | grep -i icon || echo "No icon files found in bundle"
 
       - name: Package as IPA
         run: |
