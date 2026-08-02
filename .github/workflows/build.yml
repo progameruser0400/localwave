@@ -16,6 +16,9 @@ jobs:
 
       - name: Select latest Xcode
         run: sudo xcode-select -s /Applications/Xcode_16.2.app  # adjust based on above listing
+      
+      - name: Install iOS platform support
+        run: sudo xcodebuild -downloadPlatform iOS
 
       - name: List schemes
         run: xcodebuild -list -project localwave.xcodeproj
